@@ -1,3 +1,4 @@
+
 {
   "name": "my-wishlist-app",
   "version": "0.0.0",
@@ -15,5 +16,8 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "vite": "^7.0.0",
     "vite-plugin-vue-devtools": "^7.7.7"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
