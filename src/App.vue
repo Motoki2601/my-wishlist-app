@@ -7,15 +7,22 @@
       <Wishlist 
         :items="wishlistItems" 
         @update-item-status="handleUpdateItemStatus" 
+        @delete-item="handleDeleteItem"
+        @edit-item="handleEditItem"
       />
       
-      <AddItemForm @item-added="handleItemAdded" />
+      <AddItemForm 
+        :initial-item="editingItem"
+        @item-added="handleItemAdded" 
+        @item-updated="handleItemUpdated"
+        @cancel-edit="cancelEdit"
+      />
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'; // watchとonMountedをインポートに追加
+import { ref, watch, onMounted } from 'vue';
 import Wishlist from './components/Wishlist.vue';
 import AddItemForm from './components/AddItemForm.vue';
 
@@ -33,6 +40,9 @@ const loadItemsFromLocalStorage = () => {
 // 欲しいものアイテムのデータを初期化（LocalStorageから読み込む）
 const wishlistItems = ref(loadItemsFromLocalStorage());
 
+// 編集中のアイテムを管理する変数（nullは新規作成モード、オブジェクトは編集モード）
+const editingItem = ref(null);
+
 // wishlistItemsが変更されるたびにLocalStorageに保存
 watch(wishlistItems, (newItems) => {
   try {
@@ -40,13 +50,12 @@ watch(wishlistItems, (newItems) => {
   } catch (e) {
     console.error("Failed to save items to localStorage", e);
   }
-}, { deep: true }); // deep: true で配列内のオブジェクトの変更も監視
+}, { deep: true });
 
 // AddItemFormから新しいアイテムが追加されたときに実行されるメソッド
 const handleItemAdded = (newItem) => {
   wishlistItems.value.push(newItem);
   console.log('App.vueで新しいアイテムを受け取りました:', newItem);
-  console.log('現在のリスト:', wishlistItems.value);
 };
 
 // Wishlistからアイテムのステータス変更イベントを受け取ったときに実行されるメソッド
@@ -58,9 +67,46 @@ const handleUpdateItemStatus = (itemId, newStatus) => {
   }
 };
 
-// コンポーネントがマウントされた時にダミーデータがない場合は初期データとして設定（初回起動時のみ）
+// Wishlistからアイテム削除イベントを受け取ったときに実行されるメソッド
+const handleDeleteItem = (itemId) => {
+  wishlistItems.value = wishlistItems.value.filter(item => item.id !== itemId);
+  console.log(`アイテムID: ${itemId} が削除されました。`);
+  // 削除されたアイテムが編集中のアイテムだった場合、編集モードを終了
+  if (editingItem.value && editingItem.value.id === itemId) {
+    editingItem.value = null;
+  }
+};
+
+// Wishlistからアイテム編集イベントを受け取ったときに実行されるメソッド
+const handleEditItem = (itemId) => {
+  const itemToEdit = wishlistItems.value.find(item => item.id === itemId);
+  if (itemToEdit) {
+    // 編集中のアイテムとして設定
+    editingItem.value = { ...itemToEdit }; // オブジェクトのコピーを渡す
+    console.log(`アイテムID: ${itemId} を編集モードにしました。`);
+  }
+};
+
+// AddItemFormからアイテムが更新されたときに実行されるメソッド
+const handleItemUpdated = (updatedItem) => {
+  const itemIndex = wishlistItems.value.findIndex(item => item.id === updatedItem.id);
+  if (itemIndex !== -1) {
+    wishlistItems.value[itemIndex] = updatedItem; // アイテムを更新
+    console.log(`アイテムID: ${updatedItem.id} が更新されました。`);
+    editingItem.value = null; // 編集モードを終了
+  }
+};
+
+// AddItemFormから編集キャンセルイベントを受け取ったときに実行されるメソッド
+const cancelEdit = () => {
+  editingItem.value = null; // 編集モードを終了
+  console.log('編集がキャンセルされました。');
+};
+
+
+// コンポーネントがマウントされた時にローカルストレージにデータがない場合は初期データとして設定（初回起動時のみ）
 onMounted(() => {
-  if (wishlistItems.value.length === 0) {
+  if (wishlistItems.value.length === 0 && !localStorage.getItem('myWishlistItems')) {
     const initialItems = [
       {
         id: 1,
@@ -96,10 +142,7 @@ onMounted(() => {
         isPurchased: false
       }
     ];
-    // localStorageにデータがない場合のみ初期データを設定
-    if (!localStorage.getItem('myWishlistItems')) {
-      wishlistItems.value = initialItems;
-    }
+    wishlistItems.value = initialItems;
   }
 });
 </script>

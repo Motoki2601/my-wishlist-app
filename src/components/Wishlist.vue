@@ -49,6 +49,9 @@
         <div class="item-actions">
           <button v-if="!item.isPurchased" @click="markAsPurchased(item.id)" class="purchase-button">購入済みにする</button>
           <span v-else class="purchased-label">購入済み</span>
+          
+          <button @click="editItem(item.id)" class="edit-button">編集</button> 
+          <button @click="deleteItem(item.id)" class="delete-button">削除</button>
         </div>
       </li>
     </ul>
@@ -56,7 +59,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, computed, defineEmits } from 'vue'; // defineEmitsをインポートに追加
+import { defineProps, ref, computed, defineEmits } from 'vue';
 
 const props = defineProps({
   items: {
@@ -65,13 +68,13 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update-item-status']); // 親にステータス変更を通知するためのイベントを定義
+// イベントを定義: update-item-status と delete-item
+const emit = defineEmits(['update-item-status', 'delete-item', 'edit-item']);
 
-const currentSort = ref('none'); // ソート条件
-const selectedCategory = ref(''); // 選択されたカテゴリ
-const showUnpurchasedOnly = ref(false); // 未購入のみ表示するかどうか
+const currentSort = ref('none');
+const selectedCategory = ref('');
+const showUnpurchasedOnly = ref(false);
 
-// 登録されているアイテムからユニークなカテゴリリストを取得
 const uniqueCategories = computed(() => {
   const categories = new Set();
   props.items.forEach(item => {
@@ -82,7 +85,6 @@ const uniqueCategories = computed(() => {
   return [...categories].sort();
 });
 
-// 欲しいものアイテムをソートするための算出プロパティ (変更なし)
 const sortedItems = computed(() => {
   let sortableItems = [...props.items]; 
 
@@ -111,23 +113,19 @@ const sortedItems = computed(() => {
       break;
     case 'none':
     default:
-      // ソートなしの場合は元のID順に戻す（データ追加時のIDは増加するため）
       sortableItems.sort((a, b) => a.id - b.id);
       break;
   }
   return sortableItems;
 });
 
-// ソートされたアイテムをさらに絞り込むための算出プロパティ
 const filteredAndSortedItems = computed(() => {
   let filteredItems = sortedItems.value; 
 
-  // カテゴリでの絞り込み
   if (selectedCategory.value) {
     filteredItems = filteredItems.filter(item => item.category === selectedCategory.value);
   }
 
-  // 未購入のみ表示の絞り込み
   if (showUnpurchasedOnly.value) {
     filteredItems = filteredItems.filter(item => !item.isPurchased);
   }
@@ -135,15 +133,25 @@ const filteredAndSortedItems = computed(() => {
   return filteredItems;
 });
 
-// アイテムを購入済みにマークするメソッド
 const markAsPurchased = (itemId) => {
-  // 親コンポーネントにアイテムIDと新しいステータス（true）を伝えるイベントを発行
   emit('update-item-status', itemId, true);
+};
+
+// アイテムを削除するメソッド
+const deleteItem = (itemId) => {
+  if (confirm('この欲しいものを削除してもよろしいですか？')) { // 確認ダイアログ
+    emit('delete-item', itemId); // 親コンポーネントにIDを渡して削除を要求
+  }
+};
+
+// アイテムを編集するメソッド
+const editItem = (itemId) => {
+  emit('edit-item', itemId); // 親コンポーネントにIDを渡して編集を要求
 };
 </script>
 
 <style scoped>
-/* 既存のスタイルは変更なし、以下に新規追加スタイル */
+/* 既存のスタイルは変更なし */
 .wishlist-container {
   max-width: 800px;
   margin: 0 auto;
@@ -171,13 +179,13 @@ ul {
   padding: 15px;
   text-align: left;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  display: flex; /* Flexboxを使ってinfoとactionsを横並びにする */
-  justify-content: space-between; /* 両端に配置 */
-  align-items: center; /* 中央揃え */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .item-info {
-  flex-grow: 1; /* スペースを埋める */
+  flex-grow: 1;
 }
 
 .item-info h3 {
@@ -237,7 +245,7 @@ small {
 .controls label {
   margin-right: 10px;
   font-weight: bold;
-  white-space: nowrap; /* テキストの折り返しを防ぐ */
+  white-space: nowrap;
 }
 
 .controls select,
@@ -247,38 +255,61 @@ small {
   border-radius: 4px;
 }
 
-/* 新規追加スタイル */
+/* アクションボタン用のスタイル */
 .item-actions {
-  margin-left: 20px; /* 情報との間隔 */
+  display: flex;
+  flex-direction: column; /* ボタンを縦に並べる */
+  gap: 5px; /* ボタン間のスペース */
+  margin-left: 20px;
 }
 
-.purchase-button {
-  background-color: #007bff; /* 青系の色 */
-  color: white;
+.purchase-button, .edit-button, .delete-button {
   border: none;
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 0.9em;
-  white-space: nowrap; /* ボタン内のテキストの折り返しを防ぐ */
+  white-space: nowrap;
+}
+
+.purchase-button {
+  background-color: #007bff;
+  color: white;
 }
 
 .purchase-button:hover {
   background-color: #0056b3;
 }
 
+.edit-button {
+  background-color: #ffc107; /* 黄色系 */
+  color: #333;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.delete-button {
+  background-color: #dc3545; /* 赤系 */
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
 .purchased-label {
-  color: #28a745; /* 緑系の色 */
+  color: #28a745;
   font-weight: bold;
   font-size: 0.9em;
   white-space: nowrap;
 }
 
-/* 購入済みアイテムのスタイル */
 .wishlist-item.is-purchased {
-  opacity: 0.7; /* 少し薄く表示 */
-  text-decoration: line-through; /* テキストに打ち消し線 */
-  background-color: #e6ffe6; /* 少し緑がかった背景色 */
+  opacity: 0.7;
+  text-decoration: line-through;
+  background-color: #e6ffe6;
 }
 </style>
