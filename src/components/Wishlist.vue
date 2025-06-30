@@ -67,7 +67,6 @@ const props = defineProps({
   }
 });
 
-// イベントを定義: update-item-status と delete-item
 const emit = defineEmits(['update-item-status', 'delete-item', 'edit-item']);
 
 const currentSort = ref('none');
@@ -112,7 +111,7 @@ const sortedItems = computed(() => {
       break;
     case 'none':
     default:
-      sortableItems.sort((a, b) => a.id - b.id);
+      sortableItems.sort((a, b) => a.id - b.id); // デフォルトはID順（追加順）
       break;
   }
   return sortableItems;
@@ -136,33 +135,33 @@ const markAsPurchased = (itemId) => {
   emit('update-item-status', itemId, true);
 };
 
-// アイテムを削除するメソッド
 const deleteItem = (itemId) => {
-  if (confirm('この欲しいものを削除してもよろしいですか？')) { // 確認ダイアログ
-    emit('delete-item', itemId); // 親コンポーネントにIDを渡して削除を要求
+  if (confirm('この欲しいものを削除してもよろしいですか？')) {
+    emit('delete-item', itemId);
   }
 };
 
-// アイテムを編集するメソッド
 const editItem = (itemId) => {
-  emit('edit-item', itemId); // 親コンポーネントにIDを渡して編集を要求
+  emit('edit-item', itemId);
 };
 </script>
 
 <style scoped>
-/* 既存のスタイルは変更なし */
 .wishlist-container {
-  max-width: 800px;
+  max-width: 850px; /* App.vue と合わせて最大幅を調整 */
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 25px; /* パディングを調整 */
+  background-color: #ffffff; /* 白い背景に */
+  border-radius: 10px; /* 角を丸く */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* 影を強調 */
+  border: 1px solid #e0e0e0; /* 薄いグレーのボーダーを追加 */
 }
 
 h2 {
-  color: #35495e;
-  margin-bottom: 20px;
+  color: #6a9955; /* 緑系の色に */
+  margin-bottom: 25px; /* 余白を調整 */
+  font-weight: 600;
+  font-size: 1.9em;
 }
 
 ul {
@@ -171,144 +170,193 @@ ul {
 }
 
 .wishlist-item {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  padding: 15px;
+  background-color: #fcfcfc; /* アイテムの背景色をより明るく */
+  border: 1px solid #ececec; /* ボーダーを薄く、柔らかい色に */
+  border-radius: 8px; /* 角を丸く */
+  margin-bottom: 12px; /* アイテム間の余白 */
+  padding: 18px 20px; /* パディングを調整 */
   text-align: left;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 影を柔らかく */
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* 上揃えに */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wishlist-item:hover {
+  transform: translateY(-3px); /* ホバー時に少し浮き上がる */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .item-info {
   flex-grow: 1;
+  padding-right: 20px; /* 情報とボタンの間にスペース */
 }
 
 .item-info h3 {
-  color: #42b983;
+  color: #4a4a4a; /* 商品名の色を濃いグレーに */
   margin-top: 0;
-  margin-bottom: 5px;
+  margin-bottom: 8px; /* 下部余白を調整 */
+  font-size: 1.4em;
 }
 
 .item-info p {
-  margin: 3px 0;
-  color: #555;
+  margin: 4px 0; /* 行間の余白を調整 */
+  color: #666; /* 文字色を柔らかいグレーに */
+  font-size: 0.95em;
 }
 
 .item-info a {
-  color: #007bff;
+  color: #72a85e; /* 緑系のリンク色 */
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
+  display: inline-block; /* リンクを下線なしで表示し、少しボタンのように */
+  margin-top: 8px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #72a85e; /* 破線の下線 */
 }
 
 .item-info a:hover {
-  text-decoration: underline;
+  color: #5b8748;
+  border-bottom-color: #5b8748;
 }
 
 .item-memo {
-  font-size: 0.9em;
-  color: #777;
-  margin-top: 8px;
+  font-size: 0.88em;
+  color: #888;
+  margin-top: 10px;
+  line-height: 1.5; /* 行の高さを調整 */
 }
 
 small {
   display: block;
-  margin-top: 10px;
-  font-size: 0.8em;
-  color: #999;
+  margin-top: 12px;
+  font-size: 0.78em;
+  color: #a0a0a0;
 }
 
 .no-items-message {
   text-align: center;
   color: #888;
-  margin-top: 30px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  border: 1px dashed #cccccc;
 }
 
 .controls {
   text-align: right;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* コントロールとリストの間の余白 */
   display: flex;
-  gap: 15px;
+  gap: 20px; /* 各コントロールグループの間隔 */
   justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* 小さい画面での折り返し */
+  padding-bottom: 15px; /* コントロールの下部にパディング */
+  border-bottom: 1px solid #eee; /* 下線を追加 */
 }
 
 .control-group {
   display: flex;
   align-items: center;
+  background-color: #f7f7f7; /* コントロールグループの背景色 */
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
 }
 
 .controls label {
   margin-right: 10px;
-  font-weight: bold;
+  font-weight: 500;
   white-space: nowrap;
+  color: #555;
+  font-size: 0.92em;
 }
 
 .controls select,
 .controls input[type="checkbox"] {
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px; /* 角を少し丸く */
+  font-size: 0.92em;
+  color: #4a4a4a;
+}
+
+.controls select {
+  background-color: #ffffff;
+  cursor: pointer;
 }
 
 /* アクションボタン用のスタイル */
 .item-actions {
   display: flex;
-  flex-direction: column; /* ボタンを縦に並べる */
-  gap: 5px; /* ボタン間のスペース */
+  flex-direction: column;
+  gap: 8px; /* ボタン間のスペースを少し増やす */
   margin-left: 20px;
 }
 
 .purchase-button, .edit-button, .delete-button {
   border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 10px 15px; /* パディングを増やす */
+  border-radius: 20px; /* 角を丸く */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
   font-size: 0.9em;
   white-space: nowrap;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* 影を追加 */
 }
 
 .purchase-button {
-  background-color: #007bff;
+  background-color: #72a85e; /* 緑系の購入ボタン */
   color: white;
 }
 
 .purchase-button:hover {
-  background-color: #0056b3;
+  background-color: #5b8748;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .edit-button {
-  background-color: #ffc107; /* 黄色系 */
-  color: #333;
+  background-color: #f0f0f0; /* 薄いグレーの編集ボタン */
+  color: #555;
+  border: 1px solid #ddd;
 }
 
 .edit-button:hover {
-  background-color: #e0a800;
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .delete-button {
-  background-color: #dc3545; /* 赤系 */
+  background-color: #e57373; /* 柔らかい赤系の削除ボタン */
   color: white;
 }
 
 .delete-button:hover {
-  background-color: #c82333;
+  background-color: #d35a5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .purchased-label {
-  color: #28a745;
+  color: #6a9955; /* 緑系の色に */
   font-weight: bold;
-  font-size: 0.9em;
+  font-size: 0.95em;
   white-space: nowrap;
+  padding: 8px 10px;
+  background-color: #e6ffe6; /* 薄い緑の背景 */
+  border-radius: 20px;
+  border: 1px solid #a4d8a4;
+  text-align: center;
 }
 
 .wishlist-item.is-purchased {
-  opacity: 0.7;
-  text-decoration: line-through;
-  background-color: #e6ffe6;
+  opacity: 0.8; /* 少し透明感を出す */
+  text-decoration: line-through; /* 取り消し線 */
+  background-color: #f0fff0; /* 非常に薄い緑の背景 */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03); /* 影をさらに弱く */
 }
 </style>

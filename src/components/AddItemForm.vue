@@ -55,7 +55,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['item-added', 'item-updated', 'cancel-edit', 'close-modal']); // close-modalイベントを追加
+const emit = defineEmits(['item-added', 'item-updated', 'cancel-edit', 'close-modal']);
 
 const newItem = ref({
   id: null,
@@ -121,83 +121,75 @@ const cancelEdit = () => {
   emit('cancel-edit');
 };
 
-// ★追加: モーダルを閉じるためのメソッド
 const closeModal = () => {
   emit('close-modal');
-  resetForm(); // フォームもリセット
+  resetForm();
 };
 </script>
 
 <style scoped>
-/* モーダルオーバーレイのスタイル */
 .modal-overlay {
-  position: fixed; /* 画面に固定 */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+  background-color: rgba(0, 0, 0, 0.4); /* 半透明の黒を少し薄く */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* 他の要素の上に表示 */
+  z-index: 1000;
+  backdrop-filter: blur(3px); /* 背景を少しぼかす */
 }
 
-/* モーダルコンテナのスタイル */
 .modal-container {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  max-width: 600px;
-  width: 90%; /* 画面幅に合わせて調整 */
-  position: relative; /* 閉じるボタンの配置のため */
-  box-sizing: border-box; /* paddingがwidthに含まれるように */
+  background-color: #fcfcfc; /* モーダルの背景色を明るいグレーに */
+  padding: 35px 40px; /* パディングを増やす */
+  border-radius: 12px; /* 角をさらに丸く */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 影を強調 */
+  max-width: 650px; /* 最大幅を少し広げる */
+  width: 90%;
+  position: relative;
+  box-sizing: border-box;
 }
 
-/* 閉じるボタンのスタイル */
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 1.5em;
+  font-size: 1.8em; /* サイズを少し大きく */
   cursor: pointer;
-  color: #666;
+  color: #888; /* 閉じるボタンの色をグレーに */
   padding: 5px;
-  line-height: 1; /* 余分な高さを削除 */
+  line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .close-button:hover {
-  color: #333;
-}
-
-/* フォームとボタンの既存スタイルはそのまま */
-.add-item-form {
-  max-width: none; /* 親のモーダルコンテナが幅を持つので、ここでは無効化 */
-  margin: 0; /* 親のモーダルコンテナが中央寄せするので、ここでは無効化 */
-  padding: 0; /* 親のモーダルコンテナがpaddingを持つので、ここでは無効化 */
-  background-color: transparent; /* モーダルコンテナが背景色を持つので、ここでは透明に */
-  box-shadow: none; /* 親のモーダルコンテナが影を持つので、ここでは無効化 */
+  color: #555;
 }
 
 h2 {
-  color: #35495e;
+  color: #6a9955; /* 緑系の色に */
   text-align: center;
-  margin-bottom: 25px;
-  margin-top: 0; /* 上部パディングを削除 */
+  margin-bottom: 30px; /* 余白を増やす */
+  margin-top: 0;
+  font-weight: 600;
+  font-size: 1.8em;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 18px; /* 各フォームグループの余白を調整 */
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #333;
+  margin-bottom: 7px; /* ラベルと入力欄の間隔を調整 */
+  font-weight: 500; /* フォントの太さを調整 */
+  color: #555; /* ラベルの色を少し柔らかく */
+  font-size: 0.95em;
 }
 
 input[type="text"],
@@ -205,46 +197,57 @@ input[type="number"],
 input[type="url"],
 textarea,
 select {
-  width: 100%; /* calcなしで100%に */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%;
+  padding: 12px; /* パディングを増やす */
+  border: 1px solid #dcdcdc; /* ボーダーの色を薄いグレーに */
+  border-radius: 6px; /* 角を丸く */
   font-size: 1em;
+  box-sizing: border-box; /* パディングをwidthに含める */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #8bbd77; /* フォーカス時のボーダー色を緑系に */
+  box-shadow: 0 0 0 3px rgba(106, 153, 85, 0.2); /* フォーカス時の影を追加 */
 }
 
 textarea {
   resize: vertical;
-  min-height: 80px;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 12px 20px;
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1.1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
+  min-height: 100px; /* 最小高さを増やす */
 }
 
 button[type="submit"] {
-  margin-bottom: 10px;
+  background-color: #6a9955; /* 緑系の色に */
+  color: white;
+  padding: 14px 25px;
+  border-radius: 25px; /* 角を丸く */
+  font-size: 1.1em;
+  margin-top: 25px; /* 上部の余白を調整 */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-button:hover {
-  background-color: #368a62;
+button[type="submit"]:hover {
+  background-color: #5b8748;
+  transform: translateY(-1px);
 }
 
 .cancel-button {
-  background-color: #6c757d;
-  margin-top: 0;
+  background-color: #a8a8a8; /* グレー系の色に */
+  color: white;
+  margin-top: 10px; /* ボタン間の余白 */
+  padding: 14px 25px;
+  border-radius: 25px; /* 角を丸く */
+  font-size: 1.1em;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-button:hover {
-  background-color: #5a6268;
+  background-color: #909090;
+  transform: translateY(-1px);
 }
 </style>

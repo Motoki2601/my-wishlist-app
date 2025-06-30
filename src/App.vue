@@ -4,6 +4,8 @@
       <h1>私の欲しいものリストアプリ</h1>
     </header>
     <main>
+      <button @click="openAddFormModal" class="add-new-item-button">＋ 欲しいものを追加</button>
+
       <Wishlist 
         :items="wishlistItems" 
         @update-item-status="handleUpdateItemStatus" 
@@ -11,8 +13,6 @@
         @edit-item="handleEditItem"
       />
       
-      <button @click="openAddFormModal" class="add-new-item-button">＋ 欲しいものを追加</button>
-
       <AddItemForm 
         v-if="showAddFormModal"
         :initial-item="editingItem"
@@ -48,7 +48,7 @@ const wishlistItems = ref(loadItemsFromLocalStorage());
 const editingItem = ref(null);
 
 // 欲しいもの追加フォームのポップアップ表示状態
-const showAddFormModal = ref(false); // ★追加: ポップアップの表示/非表示を制御
+const showAddFormModal = ref(false);
 
 // wishlistItemsが変更されるたびにLocalStorageに保存
 watch(wishlistItems, (newItems) => {
@@ -63,7 +63,7 @@ watch(wishlistItems, (newItems) => {
 const handleItemAdded = (newItem) => {
   wishlistItems.value.push(newItem);
   console.log('App.vueで新しいアイテムを受け取りました:', newItem);
-  closeAddFormModal(); // ★追加: アイテム追加後にポップアップを閉じる
+  closeAddFormModal();
 };
 
 // アイテムのステータス変更ハンドラ
@@ -80,7 +80,7 @@ const handleDeleteItem = (itemId) => {
   wishlistItems.value = wishlistItems.value.filter(item => item.id !== itemId);
   console.log(`アイテムID: ${itemId} が削除されました。`);
   if (editingItem.value && editingItem.value.id === itemId) {
-    cancelEdit(); // ★変更: 削除されたアイテムが編集中の場合、編集モードを終了
+    cancelEdit();
   }
 };
 
@@ -89,7 +89,7 @@ const handleEditItem = (itemId) => {
   const itemToEdit = wishlistItems.value.find(item => item.id === itemId);
   if (itemToEdit) {
     editingItem.value = { ...itemToEdit };
-    showAddFormModal.value = true; // ★追加: 編集モードでポップアップを開く
+    showAddFormModal.value = true;
     console.log(`アイテムID: ${itemId} を編集モードにしました。`);
   }
 };
@@ -100,27 +100,27 @@ const handleItemUpdated = (updatedItem) => {
   if (itemIndex !== -1) {
     wishlistItems.value[itemIndex] = updatedItem;
     console.log(`アイテムID: ${updatedItem.id} が更新されました。`);
-    closeAddFormModal(); // ★追加: アイテム更新後にポップアップを閉じる
+    closeAddFormModal();
   }
 };
 
 // 編集キャンセルハンドラ
 const cancelEdit = () => {
   editingItem.value = null;
-  closeAddFormModal(); // ★追加: 編集キャンセル時にポップアップを閉じる
+  closeAddFormModal();
   console.log('編集がキャンセルされました。');
 };
 
-// ★追加: ポップアップを開くメソッド
+// ポップアップを開くメソッド
 const openAddFormModal = () => {
-  editingItem.value = null; // 新規追加のため編集中のアイテムをクリア
+  editingItem.value = null;
   showAddFormModal.value = true;
 };
 
-// ★追加: ポップアップを閉じるメソッド
+// ポップアップを閉じるメソッド
 const closeAddFormModal = () => {
   showAddFormModal.value = false;
-  editingItem.value = null; // 閉じる時に編集中のアイテムをクリア
+  editingItem.value = null;
 };
 
 
@@ -169,37 +169,57 @@ onMounted(() => {
 
 <style scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* フォントを柔らかい印象に */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #4a4a4a; /* 全体的な文字色をグレー系に */
+  margin-top: 40px; /* 上部の余白を調整 */
+  background-color: #f7f7f7; /* 全体の背景色を少しグレーに */
+  min-height: 100vh; /* 画面全体の高さを確保 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 header {
   margin-bottom: 30px;
+  width: 100%; /* 幅を確保 */
+  padding: 20px 0;
+  background-color: #e0e0e0; /* ヘッダーの背景色をグレーに */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 軽い影を追加 */
 }
 
 h1 {
-  color: #42b983;
+  color: #6a9955; /* 緑系の色に */
+  font-weight: 600; /* 少し太めに */
+  font-size: 2.2em; /* タイトルを少し大きく */
+}
+
+main {
+  width: 100%;
+  max-width: 850px; /* 最大幅を少し広げる */
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* ポップアップを開くボタンのスタイル */
 .add-new-item-button {
-  background-color: #007bff; /* 青系 */
+  background-color: #6a9955; /* 緑系の色に */
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-size: 1.1em;
+  padding: 14px 30px; /* パディングを少し増やす */
+  border-radius: 25px; /* 角を丸くして柔らかさを出す */
+  font-size: 1.15em; /* フォントサイズを少し大きく */
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 30px; /* リストとの間隔 */
-  margin-bottom: 30px; /* フォームとの間隔 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* ホバーエフェクトを追加 */
+  margin-top: 25px; /* 上部に余白 */
+  margin-bottom: 25px; /* 下部に余白 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 影を追加 */
 }
 
 .add-new-item-button:hover {
-  background-color: #0056b3;
+  background-color: #5b8748; /* ホバー時の色を少し濃く */
+  transform: translateY(-2px); /* 少し浮き上がるエフェクト */
 }
 </style>
