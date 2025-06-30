@@ -1,7 +1,6 @@
 <template>
   <div class="wishlist-container">
     <h2>欲しいものリスト</h2>
-
     <div class="controls">
       <div class="control-group">
         <label for="sort">ソート:</label>

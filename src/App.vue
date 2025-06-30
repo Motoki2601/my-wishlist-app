@@ -11,11 +11,15 @@
         @edit-item="handleEditItem"
       />
       
+      <button @click="openAddFormModal" class="add-new-item-button">＋ 欲しいものを追加</button>
+
       <AddItemForm 
+        v-if="showAddFormModal"
         :initial-item="editingItem"
         @item-added="handleItemAdded" 
         @item-updated="handleItemUpdated"
         @cancel-edit="cancelEdit"
+        @close-modal="closeAddFormModal"
       />
     </main>
   </div>
@@ -43,6 +47,9 @@ const wishlistItems = ref(loadItemsFromLocalStorage());
 // 編集中のアイテムを管理する変数（nullは新規作成モード、オブジェクトは編集モード）
 const editingItem = ref(null);
 
+// 欲しいもの追加フォームのポップアップ表示状態
+const showAddFormModal = ref(false); // ★追加: ポップアップの表示/非表示を制御
+
 // wishlistItemsが変更されるたびにLocalStorageに保存
 watch(wishlistItems, (newItems) => {
   try {
@@ -52,13 +59,14 @@ watch(wishlistItems, (newItems) => {
   }
 }, { deep: true });
 
-// AddItemFormから新しいアイテムが追加されたときに実行されるメソッド
+// 新しいアイテムが追加されたときのハンドラ
 const handleItemAdded = (newItem) => {
   wishlistItems.value.push(newItem);
   console.log('App.vueで新しいアイテムを受け取りました:', newItem);
+  closeAddFormModal(); // ★追加: アイテム追加後にポップアップを閉じる
 };
 
-// Wishlistからアイテムのステータス変更イベントを受け取ったときに実行されるメソッド
+// アイテムのステータス変更ハンドラ
 const handleUpdateItemStatus = (itemId, newStatus) => {
   const itemIndex = wishlistItems.value.findIndex(item => item.id === itemId);
   if (itemIndex !== -1) {
@@ -67,40 +75,52 @@ const handleUpdateItemStatus = (itemId, newStatus) => {
   }
 };
 
-// Wishlistからアイテム削除イベントを受け取ったときに実行されるメソッド
+// アイテム削除ハンドラ
 const handleDeleteItem = (itemId) => {
   wishlistItems.value = wishlistItems.value.filter(item => item.id !== itemId);
   console.log(`アイテムID: ${itemId} が削除されました。`);
-  // 削除されたアイテムが編集中のアイテムだった場合、編集モードを終了
   if (editingItem.value && editingItem.value.id === itemId) {
-    editingItem.value = null;
+    cancelEdit(); // ★変更: 削除されたアイテムが編集中の場合、編集モードを終了
   }
 };
 
-// Wishlistからアイテム編集イベントを受け取ったときに実行されるメソッド
+// アイテム編集開始ハンドラ
 const handleEditItem = (itemId) => {
   const itemToEdit = wishlistItems.value.find(item => item.id === itemId);
   if (itemToEdit) {
-    // 編集中のアイテムとして設定
-    editingItem.value = { ...itemToEdit }; // オブジェクトのコピーを渡す
+    editingItem.value = { ...itemToEdit };
+    showAddFormModal.value = true; // ★追加: 編集モードでポップアップを開く
     console.log(`アイテムID: ${itemId} を編集モードにしました。`);
   }
 };
 
-// AddItemFormからアイテムが更新されたときに実行されるメソッド
+// アイテム更新ハンドラ
 const handleItemUpdated = (updatedItem) => {
   const itemIndex = wishlistItems.value.findIndex(item => item.id === updatedItem.id);
   if (itemIndex !== -1) {
-    wishlistItems.value[itemIndex] = updatedItem; // アイテムを更新
+    wishlistItems.value[itemIndex] = updatedItem;
     console.log(`アイテムID: ${updatedItem.id} が更新されました。`);
-    editingItem.value = null; // 編集モードを終了
+    closeAddFormModal(); // ★追加: アイテム更新後にポップアップを閉じる
   }
 };
 
-// AddItemFormから編集キャンセルイベントを受け取ったときに実行されるメソッド
+// 編集キャンセルハンドラ
 const cancelEdit = () => {
-  editingItem.value = null; // 編集モードを終了
+  editingItem.value = null;
+  closeAddFormModal(); // ★追加: 編集キャンセル時にポップアップを閉じる
   console.log('編集がキャンセルされました。');
+};
+
+// ★追加: ポップアップを開くメソッド
+const openAddFormModal = () => {
+  editingItem.value = null; // 新規追加のため編集中のアイテムをクリア
+  showAddFormModal.value = true;
+};
+
+// ★追加: ポップアップを閉じるメソッド
+const closeAddFormModal = () => {
+  showAddFormModal.value = false;
+  editingItem.value = null; // 閉じる時に編集中のアイテムをクリア
 };
 
 
@@ -163,5 +183,23 @@ header {
 
 h1 {
   color: #42b983;
+}
+
+/* ポップアップを開くボタンのスタイル */
+.add-new-item-button {
+  background-color: #007bff; /* 青系 */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 30px; /* リストとの間隔 */
+  margin-bottom: 30px; /* フォームとの間隔 */
+}
+
+.add-new-item-button:hover {
+  background-color: #0056b3;
 }
 </style>

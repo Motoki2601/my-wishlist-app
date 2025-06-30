@@ -1,88 +1,83 @@
 <template>
-  <div class="add-item-form">
-    <h2>{{ isEditing ? '欲しいものを編集' : '新しい欲しいものを追加' }}</h2>
-    <form @submit.prevent="submitForm">
-      <div class="form-group">
-        <label for="name">商品名:</label>
-        <input type="text" id="name" v-model="newItem.name" required />
-      </div>
+  <div class="modal-overlay" @click.self="closeModal">
+    <div class="modal-container">
+      <button class="close-button" @click="closeModal">×</button>
+      <h2>{{ isEditing ? '欲しいものを編集' : '新しい欲しいものを追加' }}</h2>
+      <form @submit.prevent="submitForm">
+        <div class="form-group">
+          <label for="name">商品名:</label>
+          <input type="text" id="name" v-model="newItem.name" required />
+        </div>
 
-      <div class="form-group">
-        <label for="price">価格:</label>
-        <input type="number" id="price" v-model.number="newItem.price" required />
-      </div>
+        <div class="form-group">
+          <label for="price">価格:</label>
+          <input type="number" id="price" v-model.number="newItem.price" required />
+        </div>
 
-      <div class="form-group">
-        <label for="url">WebサイトのURL:</label>
-        <input type="url" id="url" v-model="newItem.url" />
-      </div>
+        <div class="form-group">
+          <label for="url">WebサイトのURL:</label>
+          <input type="url" id="url" v-model="newItem.url" />
+        </div>
 
-      <div class="form-group">
-        <label for="memo">メモ:</label>
-        <textarea id="memo" v-model="newItem.memo"></textarea>
-      </div>
+        <div class="form-group">
+          <label for="memo">メモ:</label>
+          <textarea id="memo" v-model="newItem.memo"></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="category">カテゴリ:</label>
-        <input type="text" id="category" v-model="newItem.category" />
-      </div>
+        <div class="form-group">
+          <label for="category">カテゴリ:</label>
+          <input type="text" id="category" v-model="newItem.category" />
+        </div>
 
-      <div class="form-group">
-        <label for="priority">優先度:</label>
-        <select id="priority" v-model="newItem.priority">
-          <option value="高">高</option>
-          <option value="中">中</option>
-          <option value="低">低</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="priority">優先度:</label>
+          <select id="priority" v-model="newItem.priority">
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+          </select>
+        </div>
 
-      <button type="submit">{{ isEditing ? '更新' : 'リストに追加' }}</button>
-      <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-button">キャンセル</button>
-    </form>
+        <button type="submit">{{ isEditing ? '更新' : 'リストに追加' }}</button>
+        <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-button">キャンセル</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, defineProps, defineEmits } from 'vue'; // definePropsを追加
+import { ref, computed, watch, defineProps, defineEmits } from 'vue';
 
-// 親から渡されるプロパティを定義
 const props = defineProps({
-  initialItem: { // 編集中のアイテム情報（新規作成時はnull）
+  initialItem: {
     type: Object,
     default: null
   }
 });
 
-// イベントを発行するためのemit関数を定義
-const emit = defineEmits(['item-added', 'item-updated', 'cancel-edit']);
+const emit = defineEmits(['item-added', 'item-updated', 'cancel-edit', 'close-modal']); // close-modalイベントを追加
 
-// 新しい（または編集中の）アイテムのデータを格納するためのリアクティブな変数
 const newItem = ref({
-  id: null, // 編集時に必要となるID
+  id: null,
   name: '',
-  price: null, // 数値として扱うためnull
+  price: null,
   url: '',
   memo: '',
   category: '',
-  priority: '中', // デフォルト値を設定
+  priority: '中',
   isPurchased: false
 });
 
-// フォームが編集モードかどうかを判断する算出プロパティ
 const isEditing = computed(() => props.initialItem !== null);
 
-// initialItemプロパティが変更されたときにnewItemを更新
 watch(() => props.initialItem, (newInitialItem) => {
   if (newInitialItem) {
-    // 編集モードの場合、initialItemの値をnewItemにコピー
     newItem.value = { ...newInitialItem };
   } else {
-    // 新規作成モードの場合、newItemをリセット
     resetForm();
   }
-}, { immediate: true }); // コンポーネントがマウントされた直後にも実行
+}, { immediate: true });
 
-// フォームをリセットする関数
 const resetForm = () => {
   newItem.value = {
     id: null,
@@ -96,7 +91,6 @@ const resetForm = () => {
   };
 };
 
-// 現在の日付を取得し、YYYY-MM-DD形式にフォーマットする算出プロパティ
 const currentDate = computed(() => {
   const today = new Date();
   const year = today.getFullYear();
@@ -105,7 +99,6 @@ const currentDate = computed(() => {
   return `${year}-${month}-${day}`;
 });
 
-// フォーム送信処理（新規追加と更新を兼ねる）
 const submitForm = () => {
   if (!newItem.value.name || newItem.value.price === null) {
     alert('商品名と価格は必須です！');
@@ -113,43 +106,87 @@ const submitForm = () => {
   }
 
   if (isEditing.value) {
-    // 編集モードの場合はitem-updatedイベントを発行
     emit('item-updated', { ...newItem.value });
   } else {
-    // 新規作成モードの場合はitem-addedイベントを発行
     const itemToAdd = {
       ...newItem.value,
-      id: Date.now(), // 新規作成時のみIDを生成
+      id: Date.now(),
       registrationDate: currentDate.value
     };
     emit('item-added', itemToAdd);
   }
-  resetForm(); // フォームをリセット
 };
 
-// 編集キャンセル処理
 const cancelEdit = () => {
-  emit('cancel-edit'); // 親にキャンセルイベントを通知
-  resetForm(); // フォームをリセット
+  emit('cancel-edit');
+};
+
+// ★追加: モーダルを閉じるためのメソッド
+const closeModal = () => {
+  emit('close-modal');
+  resetForm(); // フォームもリセット
 };
 </script>
 
 <style scoped>
-/* 既存のスタイルは変更なし */
-.add-item-form {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 25px;
+/* モーダルオーバーレイのスタイル */
+.modal-overlay {
+  position: fixed; /* 画面に固定 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 他の要素の上に表示 */
+}
+
+/* モーダルコンテナのスタイル */
+.modal-container {
   background-color: #ffffff;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  max-width: 600px;
+  width: 90%; /* 画面幅に合わせて調整 */
+  position: relative; /* 閉じるボタンの配置のため */
+  box-sizing: border-box; /* paddingがwidthに含まれるように */
+}
+
+/* 閉じるボタンのスタイル */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  line-height: 1; /* 余分な高さを削除 */
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+/* フォームとボタンの既存スタイルはそのまま */
+.add-item-form {
+  max-width: none; /* 親のモーダルコンテナが幅を持つので、ここでは無効化 */
+  margin: 0; /* 親のモーダルコンテナが中央寄せするので、ここでは無効化 */
+  padding: 0; /* 親のモーダルコンテナがpaddingを持つので、ここでは無効化 */
+  background-color: transparent; /* モーダルコンテナが背景色を持つので、ここでは透明に */
+  box-shadow: none; /* 親のモーダルコンテナが影を持つので、ここでは無効化 */
 }
 
 h2 {
   color: #35495e;
   text-align: center;
   margin-bottom: 25px;
+  margin-top: 0; /* 上部パディングを削除 */
 }
 
 .form-group {
@@ -168,7 +205,7 @@ input[type="number"],
 input[type="url"],
 textarea,
 select {
-  width: calc(100% - 22px);
+  width: 100%; /* calcなしで100%に */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -191,21 +228,20 @@ button {
   font-size: 1.1em;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px; /* ボタンの上に少しスペースを追加 */
+  margin-top: 20px;
 }
 
 button[type="submit"] {
-  margin-bottom: 10px; /* サブミットボタンの下にスペース */
+  margin-bottom: 10px;
 }
 
 button:hover {
   background-color: #368a62;
 }
 
-/* キャンセルボタンのスタイル */
 .cancel-button {
-  background-color: #6c757d; /* 灰色系 */
-  margin-top: 0; /* サブミットボタンとの間隔を調整 */
+  background-color: #6c757d;
+  margin-top: 0;
 }
 
 .cancel-button:hover {
