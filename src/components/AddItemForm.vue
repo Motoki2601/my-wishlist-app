@@ -134,35 +134,35 @@ const closeModal = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* 半透明の黒を少し薄く */
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(3px); /* 背景を少しぼかす */
+  backdrop-filter: blur(3px);
 }
 
 .modal-container {
-  background-color: #fcfcfc; /* モーダルの背景色を明るいグレーに */
-  padding: 35px 40px; /* パディングを増やす */
-  border-radius: 12px; /* 角をさらに丸く */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 影を強調 */
-  max-width: 650px; /* 最大幅を少し広げる */
-  width: 90%;
+  background-color: #fcfcfc;
+  padding: 2.2rem 2.5rem; /* rem単位に変更 */
+  border-radius: 0.8rem; /* rem単位に変更 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  max-width: 650px;
+  width: 90%; /* パーセントで指定 */
   position: relative;
   box-sizing: border-box;
 }
 
 .close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 1rem; /* rem単位に変更 */
+  right: 1rem; /* rem単位に変更 */
   background: none;
   border: none;
-  font-size: 1.8em; /* サイズを少し大きく */
+  font-size: 1.8rem; /* rem単位に変更 */
   cursor: pointer;
-  color: #888; /* 閉じるボタンの色をグレーに */
-  padding: 5px;
+  color: #888;
+  padding: 0.3rem; /* rem単位に変更 */
   line-height: 1;
   transition: color 0.3s ease;
 }
@@ -172,24 +172,24 @@ const closeModal = () => {
 }
 
 h2 {
-  color: #6a9955; /* 緑系の色に */
+  color: #6a9955;
   text-align: center;
-  margin-bottom: 30px; /* 余白を増やす */
+  margin-bottom: 2rem; /* rem単位に変更 */
   margin-top: 0;
   font-weight: 600;
-  font-size: 1.8em;
+  font-size: 1.8rem; /* rem単位に変更 */
 }
 
 .form-group {
-  margin-bottom: 18px; /* 各フォームグループの余白を調整 */
+  margin-bottom: 1.2rem; /* rem単位に変更 */
 }
 
 label {
   display: block;
-  margin-bottom: 7px; /* ラベルと入力欄の間隔を調整 */
-  font-weight: 500; /* フォントの太さを調整 */
-  color: #555; /* ラベルの色を少し柔らかく */
-  font-size: 0.95em;
+  margin-bottom: 0.5rem; /* rem単位に変更 */
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem; /* rem単位に変更 */
 }
 
 input[type="text"],
@@ -198,11 +198,11 @@ input[type="url"],
 textarea,
 select {
   width: 100%;
-  padding: 12px; /* パディングを増やす */
-  border: 1px solid #dcdcdc; /* ボーダーの色を薄いグレーに */
-  border-radius: 6px; /* 角を丸く */
-  font-size: 1em;
-  box-sizing: border-box; /* パディングをwidthに含める */
+  padding: 0.75rem; /* rem単位に変更 */
+  border: 1px solid #dcdcdc;
+  border-radius: 0.4rem; /* rem単位に変更 */
+  font-size: 1rem; /* rem単位に変更 */
+  box-sizing: border-box;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -212,23 +212,24 @@ input[type="url"]:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: #8bbd77; /* フォーカス時のボーダー色を緑系に */
-  box-shadow: 0 0 0 3px rgba(106, 153, 85, 0.2); /* フォーカス時の影を追加 */
+  border-color: #8bbd77;
+  box-shadow: 0 0 0 3px rgba(106, 153, 85, 0.2);
 }
 
 textarea {
   resize: vertical;
-  min-height: 100px; /* 最小高さを増やす */
+  min-height: 6rem; /* rem単位に変更 */
 }
 
 button[type="submit"] {
-  background-color: #6a9955; /* 緑系の色に */
+  background-color: #6a9955;
   color: white;
-  padding: 14px 25px;
-  border-radius: 25px; /* 角を丸く */
-  font-size: 1.1em;
-  margin-top: 25px; /* 上部の余白を調整 */
+  padding: 0.8rem 1.5rem; /* rem単位に変更 */
+  border-radius: 1.5rem; /* rem単位に変更 */
+  font-size: 1.1rem; /* rem単位に変更 */
+  margin-top: 1.5rem; /* rem単位に変更 */
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* 幅を100%に設定 */
 }
 
 button[type="submit"]:hover {
@@ -237,17 +238,54 @@ button[type="submit"]:hover {
 }
 
 .cancel-button {
-  background-color: #a8a8a8; /* グレー系の色に */
+  background-color: #a8a8a8;
   color: white;
-  margin-top: 10px; /* ボタン間の余白 */
-  padding: 14px 25px;
-  border-radius: 25px; /* 角を丸く */
-  font-size: 1.1em;
+  margin-top: 0.8rem; /* rem単位に変更 */
+  padding: 0.8rem 1.5rem; /* rem単位に変更 */
+  border-radius: 1.5rem; /* rem単位に変更 */
+  font-size: 1.1rem; /* rem単位に変更 */
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* 幅を100%に設定 */
 }
 
 .cancel-button:hover {
   background-color: #909090;
   transform: translateY(-1px);
+}
+
+/* --- メディアクエリ（スマートフォン向け） --- */
+@media (max-width: 768px) {
+  .modal-container {
+    padding: 1.5rem 1.2rem; /* スマホではパディングを小さく */
+    width: 95%; /* スマホでは幅を広げる */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* スマホではタイトルを小さく */
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="url"],
+  textarea,
+  select {
+    padding: 0.6rem; /* スマホでは入力欄のパディングを小さく */
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    min-height: 5rem; /* スマホではテキストエリアの最小高さを小さく */
+  }
+
+  button[type="submit"],
+  .cancel-button {
+    font-size: 1rem; /* スマホではボタンのフォントサイズを小さく */
+    padding: 0.7rem 1rem;
+  }
 }
 </style>

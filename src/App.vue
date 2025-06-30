@@ -169,57 +169,77 @@ onMounted(() => {
 
 <style scoped>
 #app {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* フォントを柔らかい印象に */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #4a4a4a; /* 全体的な文字色をグレー系に */
-  margin-top: 40px; /* 上部の余白を調整 */
-  background-color: #f7f7f7; /* 全体の背景色を少しグレーに */
-  min-height: 100vh; /* 画面全体の高さを確保 */
+  color: #4a4a4a;
+  margin-top: 0; /* body側のマージンに任せる */
+  background-color: #f7f7f7;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 header {
-  margin-bottom: 30px;
-  width: 100%; /* 幅を確保 */
-  padding: 20px 0;
-  background-color: #e0e0e0; /* ヘッダーの背景色をグレーに */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 軽い影を追加 */
+  margin-bottom: 2rem; /* rem単位に変更 */
+  width: 100%;
+  padding: 1.5rem 0; /* rem単位に変更 */
+  background-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 h1 {
-  color: #6a9955; /* 緑系の色に */
-  font-weight: 600; /* 少し太めに */
-  font-size: 2.2em; /* タイトルを少し大きく */
+  color: #6a9955;
+  font-weight: 600;
+  font-size: 2.2rem; /* rem単位に変更 */
 }
 
 main {
-  width: 100%;
-  max-width: 850px; /* 最大幅を少し広げる */
-  padding: 0 20px;
+  width: 95%; /* 幅をパーセントで指定 */
+  max-width: 850px;
+  padding: 0 1rem; /* rem単位に変更 */
   box-sizing: border-box;
 }
 
-/* ポップアップを開くボタンのスタイル */
 .add-new-item-button {
-  background-color: #6a9955; /* 緑系の色に */
+  background-color: #6a9955;
   color: white;
   border: none;
-  padding: 14px 30px; /* パディングを少し増やす */
-  border-radius: 25px; /* 角を丸くして柔らかさを出す */
-  font-size: 1.15em; /* フォントサイズを少し大きく */
+  padding: 1rem 2rem; /* rem単位に変更 */
+  border-radius: 2rem; /* rem単位に変更 */
+  font-size: 1.15rem; /* rem単位に変更 */
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* ホバーエフェクトを追加 */
-  margin-top: 25px; /* 上部に余白 */
-  margin-bottom: 25px; /* 下部に余白 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 影を追加 */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1.5rem; /* rem単位に変更 */
+  margin-bottom: 1.5rem; /* rem単位に変更 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: auto; /* 幅を自動調整 */
+  max-width: 100%; /* スマホでボタンがはみ出さないように */
 }
 
 .add-new-item-button:hover {
-  background-color: #5b8748; /* ホバー時の色を少し濃く */
-  transform: translateY(-2px); /* 少し浮き上がるエフェクト */
+  background-color: #5b8748;
+  transform: translateY(-2px);
+}
+
+/* --- メディアクエリ（スマートフォン向け） --- */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem; /* スマホではタイトルを少し小さく */
+  }
+
+  main {
+    width: 100%; /* スマホではメインコンテンツの幅を100%に */
+    padding: 0 0.8rem; /* パディングをさらに小さく */
+  }
+
+  .add-new-item-button {
+    font-size: 1rem; /* スマホではボタンのフォントサイズを小さく */
+    padding: 0.8rem 1.5rem; /* パディングを小さく */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 </style>

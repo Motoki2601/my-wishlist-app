@@ -1,3 +1,4 @@
+
 <template>
   <div class="wishlist-container">
     <h2>欲しいものリスト</h2>
@@ -111,7 +112,7 @@ const sortedItems = computed(() => {
       break;
     case 'none':
     default:
-      sortableItems.sort((a, b) => a.id - b.id); // デフォルトはID順（追加順）
+      sortableItems.sort((a, b) => a.id - b.id);
       break;
   }
   return sortableItems;
@@ -148,20 +149,20 @@ const editItem = (itemId) => {
 
 <style scoped>
 .wishlist-container {
-  max-width: 850px; /* App.vue と合わせて最大幅を調整 */
+  max-width: 850px;
   margin: 0 auto;
-  padding: 25px; /* パディングを調整 */
-  background-color: #ffffff; /* 白い背景に */
-  border-radius: 10px; /* 角を丸く */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* 影を強調 */
-  border: 1px solid #e0e0e0; /* 薄いグレーのボーダーを追加 */
+  padding: 1.5rem; /* rem単位に変更 */
+  background-color: #ffffff;
+  border-radius: 0.8rem; /* rem単位に変更 */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
 }
 
 h2 {
-  color: #6a9955; /* 緑系の色に */
-  margin-bottom: 25px; /* 余白を調整 */
+  color: #6a9955;
+  margin-bottom: 1.8rem; /* rem単位に変更 */
   font-weight: 600;
-  font-size: 1.9em;
+  font-size: 1.9rem; /* rem単位に変更 */
 }
 
 ul {
@@ -170,50 +171,50 @@ ul {
 }
 
 .wishlist-item {
-  background-color: #fcfcfc; /* アイテムの背景色をより明るく */
-  border: 1px solid #ececec; /* ボーダーを薄く、柔らかい色に */
-  border-radius: 8px; /* 角を丸く */
-  margin-bottom: 12px; /* アイテム間の余白 */
-  padding: 18px 20px; /* パディングを調整 */
+  background-color: #fcfcfc;
+  border: 1px solid #ececec;
+  border-radius: 0.6rem; /* rem単位に変更 */
+  margin-bottom: 0.8rem; /* rem単位に変更 */
+  padding: 1.2rem 1.4rem; /* rem単位に変更 */
   text-align: left;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 影を柔らかく */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* 上揃えに */
+  align-items: flex-start;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .wishlist-item:hover {
-  transform: translateY(-3px); /* ホバー時に少し浮き上がる */
+  transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .item-info {
   flex-grow: 1;
-  padding-right: 20px; /* 情報とボタンの間にスペース */
+  padding-right: 1.2rem; /* rem単位に変更 */
 }
 
 .item-info h3 {
-  color: #4a4a4a; /* 商品名の色を濃いグレーに */
+  color: #4a4a4a;
   margin-top: 0;
-  margin-bottom: 8px; /* 下部余白を調整 */
-  font-size: 1.4em;
+  margin-bottom: 0.5rem; /* rem単位に変更 */
+  font-size: 1.4rem; /* rem単位に変更 */
 }
 
 .item-info p {
-  margin: 4px 0; /* 行間の余白を調整 */
-  color: #666; /* 文字色を柔らかいグレーに */
-  font-size: 0.95em;
+  margin: 0.25rem 0; /* rem単位に変更 */
+  color: #666;
+  font-size: 0.95rem; /* rem単位に変更 */
 }
 
 .item-info a {
-  color: #72a85e; /* 緑系のリンク色 */
+  color: #72a85e;
   text-decoration: none;
   font-weight: 500;
-  display: inline-block; /* リンクを下線なしで表示し、少しボタンのように */
-  margin-top: 8px;
-  padding: 4px 0;
-  border-bottom: 1px dashed #72a85e; /* 破線の下線 */
+  display: inline-block;
+  margin-top: 0.5rem; /* rem単位に変更 */
+  padding: 0.25rem 0; /* rem単位に変更 */
+  border-bottom: 1px dashed #72a85e;
 }
 
 .item-info a:hover {
@@ -222,63 +223,64 @@ ul {
 }
 
 .item-memo {
-  font-size: 0.88em;
+  font-size: 0.88rem; /* rem単位に変更 */
   color: #888;
-  margin-top: 10px;
-  line-height: 1.5; /* 行の高さを調整 */
+  margin-top: 0.6rem; /* rem単位に変更 */
+  line-height: 1.5;
 }
 
 small {
   display: block;
-  margin-top: 12px;
-  font-size: 0.78em;
+  margin-top: 0.75rem; /* rem単位に変更 */
+  font-size: 0.78rem; /* rem単位に変更 */
   color: #a0a0a0;
 }
 
 .no-items-message {
   text-align: center;
   color: #888;
-  margin-top: 40px;
-  padding: 20px;
+  margin-top: 2rem; /* rem単位に変更 */
+  padding: 1.2rem; /* rem単位に変更 */
   background-color: #f2f2f2;
-  border-radius: 8px;
+  border-radius: 0.5rem; /* rem単位に変更 */
   border: 1px dashed #cccccc;
+  font-size: 1rem; /* rem単位に変更 */
 }
 
 .controls {
   text-align: right;
-  margin-bottom: 25px; /* コントロールとリストの間の余白 */
+  margin-bottom: 1.5rem; /* rem単位に変更 */
   display: flex;
-  gap: 20px; /* 各コントロールグループの間隔 */
+  gap: 1.2rem; /* rem単位に変更 */
   justify-content: flex-end;
-  flex-wrap: wrap; /* 小さい画面での折り返し */
-  padding-bottom: 15px; /* コントロールの下部にパディング */
-  border-bottom: 1px solid #eee; /* 下線を追加 */
+  flex-wrap: wrap; /* 折り返しを有効にする */
+  padding-bottom: 1rem; /* rem単位に変更 */
+  border-bottom: 1px solid #eee;
 }
 
 .control-group {
   display: flex;
   align-items: center;
-  background-color: #f7f7f7; /* コントロールグループの背景色 */
-  padding: 8px 12px;
-  border-radius: 6px;
+  background-color: #f7f7f7;
+  padding: 0.6rem 0.8rem; /* rem単位に変更 */
+  border-radius: 0.4rem; /* rem単位に変更 */
   border: 1px solid #e5e5e5;
 }
 
 .controls label {
-  margin-right: 10px;
+  margin-right: 0.6rem; /* rem単位に変更 */
   font-weight: 500;
   white-space: nowrap;
   color: #555;
-  font-size: 0.92em;
+  font-size: 0.92rem; /* rem単位に変更 */
 }
 
 .controls select,
 .controls input[type="checkbox"] {
-  padding: 8px;
+  padding: 0.5rem; /* rem単位に変更 */
   border: 1px solid #dcdcdc;
-  border-radius: 5px; /* 角を少し丸く */
-  font-size: 0.92em;
+  border-radius: 0.3rem; /* rem単位に変更 */
+  font-size: 0.92rem; /* rem単位に変更 */
   color: #4a4a4a;
 }
 
@@ -287,28 +289,28 @@ small {
   cursor: pointer;
 }
 
-/* アクションボタン用のスタイル */
 .item-actions {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* ボタン間のスペースを少し増やす */
-  margin-left: 20px;
+  gap: 0.6rem; /* rem単位に変更 */
+  margin-left: 1.2rem; /* rem単位に変更 */
 }
 
 .purchase-button, .edit-button, .delete-button {
   border: none;
-  padding: 10px 15px; /* パディングを増やす */
-  border-radius: 20px; /* 角を丸く */
+  padding: 0.6rem 1rem; /* rem単位に変更 */
+  border-radius: 1.2rem; /* rem単位に変更 */
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  font-size: 0.9em;
+  font-size: 0.9rem; /* rem単位に変更 */
   white-space: nowrap;
   font-weight: 500;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* 影を追加 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  width: 100%; /* ボタンの幅を調整 */
 }
 
 .purchase-button {
-  background-color: #72a85e; /* 緑系の購入ボタン */
+  background-color: #72a85e;
   color: white;
 }
 
@@ -319,7 +321,7 @@ small {
 }
 
 .edit-button {
-  background-color: #f0f0f0; /* 薄いグレーの編集ボタン */
+  background-color: #f0f0f0;
   color: #555;
   border: 1px solid #ddd;
 }
@@ -331,7 +333,7 @@ small {
 }
 
 .delete-button {
-  background-color: #e57373; /* 柔らかい赤系の削除ボタン */
+  background-color: #e57373;
   color: white;
 }
 
@@ -342,21 +344,98 @@ small {
 }
 
 .purchased-label {
-  color: #6a9955; /* 緑系の色に */
+  color: #6a9955;
   font-weight: bold;
-  font-size: 0.95em;
+  font-size: 0.95rem; /* rem単位に変更 */
   white-space: nowrap;
-  padding: 8px 10px;
-  background-color: #e6ffe6; /* 薄い緑の背景 */
-  border-radius: 20px;
+  padding: 0.5rem 0.6rem; /* rem単位に変更 */
+  background-color: #e6ffe6;
+  border-radius: 1.2rem; /* rem単位に変更 */
   border: 1px solid #a4d8a4;
   text-align: center;
 }
 
 .wishlist-item.is-purchased {
-  opacity: 0.8; /* 少し透明感を出す */
-  text-decoration: line-through; /* 取り消し線 */
-  background-color: #f0fff0; /* 非常に薄い緑の背景 */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03); /* 影をさらに弱く */
+  opacity: 0.8;
+  text-decoration: line-through;
+  background-color: #f0fff0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* --- メディアクエリ（スマートフォン向け） --- */
+@media (max-width: 768px) {
+  .wishlist-container {
+    padding: 1rem; /* スマホではパディングを小さく */
+    border-radius: 0.5rem; /* スマホでは角丸を少し小さく */
+  }
+
+  h2 {
+    font-size: 1.6rem; /* スマホではタイトルを小さく */
+    margin-bottom: 1.2rem;
+  }
+
+  .controls {
+    flex-direction: column; /* コントロールを縦並びに */
+    align-items: flex-start; /* 左揃えに */
+    gap: 0.8rem; /* 間隔を調整 */
+    padding-bottom: 0.8rem;
+  }
+
+  .control-group {
+    width: 100%; /* コントロールグループの幅を100%に */
+    justify-content: space-between; /* 要素を両端に寄せる */
+    padding: 0.5rem 0.6rem;
+  }
+
+  .controls label,
+  .controls select,
+  .controls input[type="checkbox"] {
+    font-size: 0.9rem; /* スマホではコントロールのフォントを小さく */
+  }
+  
+  .wishlist-item {
+    flex-direction: column; /* アイテムを縦並びに変更 */
+    align-items: stretch; /* 幅いっぱいに広げる */
+    padding: 1rem; /* スマホではアイテムのパディングを小さく */
+  }
+
+  .item-info {
+    padding-right: 0; /* 右パディングをリセット */
+    margin-bottom: 1rem; /* 情報とボタンの間に余白 */
+  }
+
+  .item-info h3 {
+    font-size: 1.2rem; /* スマホでは商品名を小さく */
+  }
+
+  .item-info p,
+  .item-info a,
+  .item-memo,
+  small {
+    font-size: 0.85rem; /* スマホではテキストを小さく */
+  }
+
+  .item-actions {
+    flex-direction: row; /* ボタンを横並びに変更 */
+    flex-wrap: wrap; /* ボタンが収まらない場合に折り返す */
+    justify-content: center; /* 中央寄せ */
+    margin-left: 0; /* マージンをリセット */
+    gap: 0.5rem; /* ボタン間の間隔を調整 */
+  }
+
+  .purchase-button, .edit-button, .delete-button {
+    flex: 1 1 auto; /* ボタンが自動的に伸縮する */
+    min-width: 45%; /* 最小幅を設定して2列になるように調整 */
+    max-width: 50%;
+    font-size: 0.85rem; /* スマホではボタンのフォントサイズを小さく */
+    padding: 0.7rem 0.8rem;
+  }
+
+  .purchased-label {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+    width: 100%; /* 購入済みラベルも幅いっぱいに */
+    box-sizing: border-box;
+  }
 }
 </style>
